@@ -1,0 +1,30 @@
+ll maxSize=2e5+5;
+
+std::vector<ll> p(maxSize), size(maxSize);
+
+ll findSet(ll v) {
+    
+    if(v==p[v]) {
+        
+        return v;
+    }
+    
+    return findSet(p[v]);
+}
+
+void unionSets(ll u, ll v) {
+    
+    u=findSet(u);
+    v=findSet(v);
+    
+    if(u!=v) {
+        
+        if(size[u]<size[v]) {
+            
+            std::swap(u, v);
+        }
+        
+        p[v]=u;
+        size[u]+=size[v];
+    }
+}
