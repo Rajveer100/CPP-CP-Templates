@@ -1,30 +1,48 @@
-ll maxSize=2e5+5;
-
-std::vector<ll> p(maxSize), size(maxSize);
-
-ll findSet(ll v) {
+class DSU {
     
-    if(v==p[v]) {
+public:
+    
+    ll maxSize;
+    std::vector<ll> p, size;
+    
+    DSU(ll maxSize) {
         
-        return v;
+        this->maxSize=maxSize;
+        
+        this->p.resize(maxSize+5);
+        this->size.resize(maxSize+5);
+        
+        for(int i=1;i<=maxSize-1;i++) {
+            
+            this->p[i]=i;
+            this->size[i]=1;
+        }
     }
     
-    return findSet(p[v]);
-}
-
-void unionSets(ll u, ll v) {
-    
-    u=findSet(u);
-    v=findSet(v);
-    
-    if(u!=v) {
+    ll findSet(ll v) {
         
-        if(size[u]<size[v]) {
+        if(v==this->p[v]) {
             
-            std::swap(u, v);
+            return v;
         }
         
-        p[v]=u;
-        size[u]+=size[v];
+        return findSet(this->p[v]);
     }
-}
+    
+    void unionSets(ll u, ll v) {
+        
+        u=findSet(u);
+        v=findSet(v);
+        
+        if(u!=v) {
+            
+            if(this->size[u]<this->size[v]) {
+                
+                std::swap(u, v);
+            }
+            
+            this->p[v]=u;
+            this->size[u]+=this->size[v];
+        }
+    }
+};

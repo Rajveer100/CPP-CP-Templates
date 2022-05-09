@@ -1,23 +1,23 @@
 enum colour {red, black};
- 
+
 struct Node {
     
     ll data, size;
     bool colour;
     Node *parent, *left, *right;
 };
- 
+
 class RBTree {
     
     Node *root, *tNil;
     ll cnt;
     
     Node* findNode(Node *z) {
- 
+        
         Node *x=this->root;
         
         while(x!=tNil) {
-                
+            
             if(x->data==z->data) {
                 
                 return x;
@@ -32,9 +32,9 @@ class RBTree {
         
         return tNil;
     }
- 
+    
     Node* findMin(Node *z) {
- 
+        
         while(z->left!=tNil) {
             
             z=z->left;
@@ -354,7 +354,7 @@ class RBTree {
             deleteFixUp(x);
         }
     }
- 
+    
     void inOrderHelper(Node *node) {
         
         if(node==tNil) {
@@ -391,8 +391,13 @@ public:
         return this->root;
     }
     
+    bool isNull(Node* node) {
+        
+        return node==tNil;
+    }
+    
     Node* find(ll key) {
- 
+        
         Node *z=new Node();
         
         z->data=key;
@@ -438,6 +443,69 @@ public:
         cnt--;
     }
     
+    ll lessThan(ll x) {
+        
+        Node* y=this->root;
+        
+        ll z=0;
+        
+        while(y!=tNil) {
+            
+            if(x>y->data) {
+                
+                z+=y->left->size+1;
+                y=y->right;
+            } else {
+                
+                y=y->left;
+            }
+        }
+            
+        return std::max(z, 0ll);
+    }
+    
+    ll lowerBound(ll x) {
+        
+        Node* y=this->root;
+        
+        ll z=inf;
+        
+        while(y!=tNil) {
+            
+            if(x>=y->data) {
+                
+                z=y->data;
+                y=y->right;
+            } else {
+                
+                y=y->left;
+            }
+        }
+        
+        return z;
+    }
+    
+    ll upperBound(ll x) {
+        
+        Node* y=this->root;
+        
+        ll z=inf;
+        
+        while(y!=tNil) {
+            
+            if(x>y->data) {
+                
+                z=y->data;
+                y=y->right;
+            } else {
+                
+                y=y->left;
+            }
+        }
+        
+        return z;
+    }
+    
     ll osSelect(Node *x, ll i) {
         
         ll r=x->left->size+1;
@@ -476,7 +544,7 @@ public:
         
         return cnt;
     }
-        
+    
     void inOrder() {
         
         inOrderHelper(this->root);
