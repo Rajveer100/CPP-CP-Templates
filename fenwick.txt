@@ -1,28 +1,37 @@
-std::vector<ll> fenwick;
-
-ll query(ll pos) {
+class Fenwick {
     
-    pos++;
+    std::vector<ll> fenwick;
     
-    ll s=0;
+public:
     
-    while(pos>0) {
+    Fenwick(ll n) {
         
-        s+=fenwick[pos];
-        pos-=pos&(-pos);
+        fenwick.resize(n+5, 0);
     }
     
-    return s;
-}
-
-void updateTree(ll n, ll pos, ll val) {
-    
-    pos++;
-    
-    while(pos<=n) {
+    ll query(ll pos) {
         
-        fenwick[pos]+=val;
-        pos+=pos&(-pos);
+        pos++;
+        
+        ll s=0;
+        
+        while(pos>0) {
+            
+            s+=fenwick[pos];
+            pos-=pos&(-pos);
+        }
+        
+        return s;
     }
-}
-
+    
+    void updateTree(ll n, ll pos, ll val) {
+        
+        pos++;
+        
+        while(pos<=n) {
+            
+            fenwick[pos]+=val;
+            pos+=pos&(-pos);
+        }
+    }
+};
