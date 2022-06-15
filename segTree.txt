@@ -2,7 +2,9 @@ class SegTree {
     
     std::vector<ll> segTree, lazy;
     std::string type;
-    
+
+public:    
+
     SegTree(std::string type) {
         
         this->type=type;
