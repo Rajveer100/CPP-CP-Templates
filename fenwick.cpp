@@ -6,19 +6,19 @@ public:
     
     Fenwick(ll n) {
         
-        this->fenwick.resize(n+5, 0);
+        this -> fenwick.resize(n + 5, 0);
     }
     
     ll query(ll pos) {
         
         pos++;
         
-        ll s=0;
+        ll s = 0;
         
-        while(pos>0) {
+        while (pos > 0) {
             
-            s+=this->fenwick[pos];
-            pos-=pos&(-pos);
+            s += this -> fenwick[pos];
+            pos -= pos & (-pos);
         }
         
         return s;
@@ -28,11 +28,10 @@ public:
         
         pos++;
         
-        while(pos<=n) {
+        while (pos <= n) {
             
-            this->fenwick[pos]+=val;
-            pos+=pos&(-pos);
+            this -> fenwick[pos] += val;
+            pos += pos & (-pos);
         }
     }
 };
-
