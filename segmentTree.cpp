@@ -36,7 +36,7 @@ public:
                 this -> lazy[2 * node + 1] += this -> lazy[node];
             }
             
-            this -> lazy[node]=0;
+            this -> lazy[node] = 0;
         }
         
         if (left >= l && right <= r) {
@@ -47,7 +47,7 @@ public:
             return 0;
         } else {
             
-            ll mid=(left+right)/2;
+            ll mid = (left + right) / 2;
             
             return rangeQuery(2 * node, left, mid, l, r) + rangeQuery(2 * node + 1, mid + 1, right, l, r);
         }
