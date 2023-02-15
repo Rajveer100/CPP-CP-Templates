@@ -1,103 +1,72 @@
-class SegTree {
+template<typename T>
+class SegmentTree {
+  std::vector<T> tree, lazy;
+ public:
+  
+  void buildTree(T &n, std::vector<T> a) {
+    T num = n;
+    n = (1 << T(std::ceil(log2(n * 1.0))));
+    tree.resize(2 * n);
+    lazy.resize(2 * n);
     
-    std::vector<ll> segTree, lazy;
-    
-public:
-    
-    void buildTree(ll &n, std::vector<ll> a) {
-        
-        ll num = n;
-        
-        n = (1ll << ll(std::ceil(log2(n * 1.0))));
-        
-        this -> segTree.resize(2 * n);
-        this -> lazy.resize(2 * n);
-        
-        for (ll i = 0; i <= num - 1; i++) {
-            
-            this -> segTree[n + i] = a[i];
-        }
-        
-        for (ll i = n - 1; i >= 1; i--) {
-            
-            this -> segTree[i] = this -> segTree[2 * i] + this -> segTree[2 * i + 1];
-        }
+    for (T i = 0; i <= num - 1; i++) {
+      tree[n + i] = a[i];
     }
-    
-    ll rangeQuery(ll node, ll left, ll right, ll l, ll r) {
-        
-        if (this -> lazy[node]) {
-            
-            this -> segTree[node] += this -> lazy[node] * (right - left + 1);
-            
-            if (left != right) {
-                
-                this -> lazy[2 * node] += this -> lazy[node];
-                this -> lazy[2 * node + 1] += this -> lazy[node];
-            }
-            
-            this -> lazy[node] = 0;
-        }
-        
-        if (left >= l && right <= r) {
-            
-            return this -> segTree[node];
-        } else if (right < l || left > r) {
-            
-            return 0;
-        } else {
-            
-            ll mid = (left + right) / 2;
-            
-            return rangeQuery(2 * node, left, mid, l, r) + rangeQuery(2 * node + 1, mid + 1, right, l, r);
-        }
+    for (T i = n - 1; i >= 1; i--) {
+      tree[i] = tree[2 * i] + tree[2 * i + 1];
     }
-    
-    void pointUpdate(ll n, ll pos, ll newVal) {
-        
-        this -> segTree[n + pos] = newVal;
-        
-        for (ll j = (n + pos) / 2; j >= 1; j /= 2) {
-            
-            this -> segTree[j] = this -> segTree[2 * j] + this -> segTree[2 * j + 1];
-        }
+  }
+  
+  T rangeQuery(T node, T left, T right, T l, T r) {
+    if (lazy[node]) {
+      tree[node] += lazy[node] * (right - left + 1);
+      if (left != right) {
+        lazy[2 * node] += lazy[node];
+        lazy[2 * node + 1] += lazy[node];
+      }
+      lazy[node] = 0;
     }
-    
-    void rangeUpdate(ll node, ll left, ll right, ll l, ll r, ll newVal) {
-        
-        if (this -> lazy[node]) {
-            
-            this -> segTree[node] += this -> lazy[node] * (right - left + 1);
-            
-            if (left != right) {
-                
-                this -> lazy[2 * node] += this -> lazy[node];
-                this -> lazy[2 * node + 1] += this -> lazy[node];
-            }
-            
-            this -> lazy[node] = 0;
-        }
-        
-        if (left >= l && right <= r) {
-            
-            this -> segTree[node] += newVal * (right - left + 1);
-            
-            if (left != right) {
-                
-                this -> lazy[2 * node] += newVal;
-                this -> lazy[2 * node + 1] += newVal;
-            }
-        } else if (right < l || left > r) {
-            
-            return;
-        } else {
-            
-            ll mid = (left + right) / 2;
-            
-            rangeUpdate(2 * node, left, mid, l, r, newVal);
-            rangeUpdate(2 * node + 1, mid + 1, right, l, r, newVal);
-            
-            this -> segTree[node] = this -> segTree[2 * node] + this -> segTree[2 * node + 1];
-        }
+    if (left >= l && right <= r) {
+      return tree[node];
+    } else if (right < l || left > r) {
+      return 0;
+    } else {
+      T mid = (left + right) / 2;
+      return rangeQuery(2 * node, left, mid, l, r) + rangeQuery(2 * node + 1, mid + 1, right, l, r);
     }
+  }
+  
+  void pointUpdate(T n, T pos, T newVal) {
+    tree[n + pos] = newVal;
+    
+    for (T j = (n + pos) / 2; j >= 1; j /= 2) {
+      tree[j] = tree[2 * j] + tree[2 * j + 1];
+    }
+  }
+  
+  void rangeUpdate(T node, T left, T right, T l, T r, T newVal) {
+    if (lazy[node]) {
+      tree[node] += lazy[node] * (right - left + 1);
+      if (left != right) {
+        lazy[2 * node] += lazy[node];
+        lazy[2 * node + 1] += lazy[node];
+      }
+      lazy[node] = 0;
+    }
+    if (left >= l && right <= r) {
+      tree[node] += newVal * (right - left + 1);
+      if (left != right) {
+        lazy[2 * node] += newVal;
+        lazy[2 * node + 1] += newVal;
+      }
+    } else if (right < l || left > r) {
+      return;
+    } else {
+      T mid = (left + right) / 2;
+      
+      rangeUpdate(2 * node, left, mid, l, r, newVal);
+      rangeUpdate(2 * node + 1, mid + 1, right, l, r, newVal);
+      tree[node] = tree[2 * node] + tree[2 * node + 1];
+    }
+  }
 };

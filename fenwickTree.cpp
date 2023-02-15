@@ -1,37 +1,30 @@
+template<typename T>
 class Fenwick {
-    
-    std::vector<ll> fenwick;
-    
+  std::vector<T> fenwick;
 public:
+  
+  Fenwick(T n) {
+    this -> fenwick.resize(n + 5, 0);
+  }
+  
+  T query(T pos) {
+    pos++;
+    T s = 0;
     
-    Fenwick(ll n) {
-        
-        this -> fenwick.resize(n + 5, 0);
+    while (pos > 0) {
+      s += this -> fenwick[pos];
+      pos -= pos & (-pos);
     }
     
-    ll query(ll pos) {
-        
-        pos++;
-        
-        ll s = 0;
-        
-        while (pos > 0) {
-            
-            s += this -> fenwick[pos];
-            pos -= pos & (-pos);
-        }
-        
-        return s;
-    }
+    return s;
+  }
+  
+  void updateTree(T n, T pos, T val) {
+    pos++;
     
-    void updateTree(ll n, ll pos, ll val) {
-        
-        pos++;
-        
-        while (pos <= n) {
-            
-            this -> fenwick[pos] += val;
-            pos += pos & (-pos);
-        }
+    while (pos <= n) {
+      this -> fenwick[pos] += val;
+      pos += pos & (-pos);
     }
+  }
 };

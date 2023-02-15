@@ -1,48 +1,37 @@
+template<typename T>
 class DSU {
+ public:
+  T maxSize;
+  std::vector<T> p, size;
+  
+  DSU(T maxSize) {
+    maxSize = maxSize;
+    p.resize(maxSize);
+    size.resize(maxSize);
     
-public:
-    
-    ll maxSize;
-    std::vector<ll> p, size;
-    
-    DSU(ll maxSize) {
-        
-        this -> maxSize = maxSize;
-        
-        this -> p.resize(maxSize + 5);
-        this -> size.resize(maxSize + 5);
-        
-        for (int i = 1; i <= maxSize - 1; i++) {
-            
-            this -> p[i] = i;
-            this -> size[i] = 1;
-        }
+    for (T i = 0; i < maxSize; i += 1) {
+      p[i] = i;
+      size[i] = 1;
     }
-    
-    ll findSet(ll v) {
-        
-        if (v == this -> p[v]) {
-            
-            return v;
-        }
-        
-        return findSet(this -> p[v]);
+  }
+  
+  T findSet(T v) {
+    if (v == p[v]) {
+      return v;
     }
+    return findSet(p[v]);
+  }
+  
+  void unionSets(T u, T v) {
+    u = findSet(u);
+    v = findSet(v);
     
-    void unionSets(ll u, ll v) {
-        
-        u = findSet(u);
-        v = findSet(v);
-        
-        if (u != v) {
-            
-            if (this -> size[u] < this -> size[v]) {
-                
-                std::swap(u, v);
-            }
-            
-            this -> p[v] = u;
-            this -> size[u] += this -> size[v];
-        }
+    if (u != v) {
+      if (size[u] < size[v]) {
+        std::swap(u, v);
+      }
+      p[v] = u;
+      size[u] += size[v];
     }
+  }
 };
